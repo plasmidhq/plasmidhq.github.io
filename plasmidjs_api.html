@@ -1,0 +1,498 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Plasmid.js Complete API Reference - Plasmid</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link rel="stylesheet" href="http://plasmidhq.github.io/plasmid/css/style.css">
+
+    <script src="http://plasmidhq.github.io/plasmidjs/libs/modernizr-2.0.6.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="http://plasmidhq.github.io/plasmid/css/pygments.css">
+    <link rel="stylesheet/less" type="text/css" href="http://plasmidhq.github.io/plasmid/css/site.less">
+    <script type="text/javascript" src="http://plasmidhq.github.io/plasmid/js/less-1.3.0.min.js"></script>
+    <link href="http://plasmidhq.github.io/plasmid/atom.xml" type="application/atom+xml" rel="alternate" title="Plasmid ATOM feed" />
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+        
+    <h1><a href="http://plasmidhq.github.io/plasmid">Plasmid.js Complete API Reference</a></h1>
+    
+        <h3>Everything you need to know.</h3>
+    
+
+	</header>
+	<div id="main" role="main">
+        
+
+    <div class=left-column>
+        <ul class=list>
+        
+            <li>
+                <a href="http://plasmidhq.github.io/plasmid/">Plasmid</a><br />
+            </li>
+        
+            <li>
+                <a href="http://plasmidhq.github.io/plasmid/downloads.html">Downloads</a><br />
+            </li>
+        
+            <li>
+                <a href="http://plasmidhq.github.io/plasmid/plasmidjs.html">Plasmid.js</a><br />
+            </li>
+        
+            <li>
+                <a href="http://plasmidhq.github.io/plasmid/plasmidjs_api.html">Plasmid.js API</a><br />
+            </li>
+        
+            <li>
+                <a href="http://plasmidhq.github.io/plasmid/plasmidsync.html">Plasmid Sync</a><br />
+            </li>
+        
+        </ul>
+    </div>
+
+    <div class=right-column>
+        
+    <article>
+        <div class="document">
+<div class="section" id="about-this-reference">
+<h1>About This Reference</h1>
+<p>This is a complete reference for the public API of Plasmid.js, and may be in flux
+as development continues. It only includes aspects of the API, however, that are
+considered stable. Anything that is likely to be removed or significantly changed,
+and is not essential to utilizing Plasmid.js, will not be completed until it has
+been stabilized.</p>
+<p>Plasmid includes a number of important types with their own APIs, by which this
+document is organized.</p>
+<p><a class="reference internal" href="#eventlistener">EventListener</a></p>
+<p><a class="reference internal" href="#promise">Promise</a></p>
+<p><a class="reference internal" href="#database">Database</a></p>
+<p><a class="reference internal" href="#transaction">Transaction</a></p>
+<p><a class="reference internal" href="#localstore">LocalStore</a></p>
+<p><a class="reference internal" href="#results">Results</a></p>
+<p><a class="reference internal" href="#credentials">Credentials</a></p>
+<p><a class="reference internal" href="#syncstore">SyncStore</a></p>
+</div>
+<div class="section" id="eventlistener">
+<h1>EventListener</h1>
+<p>Almost every object in Plasmid is an <a class="reference internal" href="#eventlistener">EventListener</a>, so this section is important
+to understand the base of all the other types.</p>
+<div class="section" id="eventlistener-on-eventname-handler">
+<h2>EventListener.on(<cite>eventname</cite>, <cite>handler</cite>)</h2>
+<blockquote>
+<p>Registers <cite>handler</cite> to be called when <cite>eventname</cite> is triggered on this object.
+It will be called bound to this object.</p>
+<p>As a side effect, if this is the first handler registered for the event type,
+it will be called with all previous triggers for this event. This allows event
+triggers to be queued before they are registered, as a convenience.</p>
+</blockquote>
+</div>
+<div class="section" id="eventlistener-trigger-eventname-arguments">
+<h2>EventListener.trigger(<cite>eventname</cite>, <cite>arguments ...</cite>)</h2>
+<blockquote>
+Calls all handlers for <cite>eventname</cite> in the order they were registered, bound to
+this object and passing all the provided <cite>arguments</cite>.</blockquote>
+</div>
+<div class="section" id="eventlistener-error-handler">
+<h2>EventListener.error(<cite>handler</cite>)</h2>
+<blockquote>
+As a convenience, binds the <cite>handler</cite> to the <cite>&quot;error&quot;</cite> event.</blockquote>
+</div>
+</div>
+<div class="section" id="promise">
+<h1>Promise</h1>
+<p>Promise is based on an <a class="reference internal" href="#eventlistener">EventListener</a>.</p>
+<div class="section" id="promise-then-success-error">
+<h2>Promise.then(<cite>success</cite>, <cite>error</cite>)</h2>
+<blockquote>
+Binds the <cite>success</cite> handler to the <cite>&quot;success&quot;</cite> event and the <cite>error</cite> handler to
+the <cite>&quot;error&quot;</cite> event. These events are fired to signal the fulfillment of the promise.</blockquote>
+</div>
+<div class="section" id="promise-ok-result">
+<h2>Promise.ok(<cite>result</cite>)</h2>
+<blockquote>
+Fulfills te promise with <cite>result</cite>.</blockquote>
+</div>
+<div class="section" id="promise-chain-promises">
+<h2>Promise.chain(<cite>promises</cite>)</h2>
+<blockquote>
+<p>This is a helper on the constructor object to wait on the result of multiple
+promises. When all <cite>promises</cite> are fulfilled, the chain promise is fulfilled with an
+array of all the results in the same order as the promises were given.</p>
+<p>It is called like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">wait</span> <span class="o">-</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">chain</span><span class="p">(</span><span class="nx">promise1</span><span class="p">,</span> <span class="nx">promise2</span><span class="p">);</span>
+<span class="nx">wait</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">result1</span> <span class="o">-</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">,</span>   <span class="nx">result2</span> <span class="o">-</span> <span class="nx">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">;</span>
+
+    <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+</blockquote>
+</div>
+</div>
+<div class="section" id="database">
+<h1>Database</h1>
+<p>Database is based on an <a class="reference internal" href="#eventlistener">EventListener</a>.</p>
+<p>The database, of course, is the first thing you're going to be working with. It acts
+primarily as a container of stores and our interface to initiating transactions, but
+otherwise is used very little directly.</p>
+<div class="section" id="database-transaction-stores-mode">
+<span id="transaction"></span><h2>Database.transaction(<cite>stores</cite>, <cite>[mode]</cite>)</h2>
+<blockquote>
+<p>Begins a transaction involving one or more stores. <cite>stores</cite> is the name of a single
+store or an array of store names. <cite>mode</cite> is optional, defaulting to <cite>&quot;readonly&quot;</cite>.</p>
+<p>Passing a mode of <cite>&quot;readwrite&quot;</cite> will create a transaction capable of creating or
+updating data in the contained stores.</p>
+<p>If you do not need to group multiple operations in a transaction, the database will
+automatically create and commit appropriate single-operation transactions.</p>
+<p>The <a class="reference internal" href="#transaction">Transaction</a> API defines a <a class="reference internal" href="#transaction-abort">Transaction.abort()</a> method, and otherwise inherits
+the rest of the Database API defined here.</p>
+<p>Use the transaction object immediately. It does <em>not</em> return a Promise, and the
+transaction will be committed as soon as no operations are being made against it. If
+you need to perform multiple operations on the transaction in sequence, rather than
+in parallel, you <em>must</em> perform each next operation in the success callback of the
+previous, or the transaction will close.</p>
+</blockquote>
+</div>
+<div class="section" id="database-setremote-remotename">
+<h2>Database.setRemote(<cite>remotename</cite>)</h2>
+<blockquote>
+Defines the name of the remote database used for syncronization with Plasmid Sync.</blockquote>
+</div>
+<div class="section" id="database-autosync-interval">
+<h2>Database.autoSync(<cite>interval</cite>)</h2>
+<blockquote>
+Defines an interval in milliseconds for automatic syncronization.</blockquote>
+</div>
+<div class="section" id="database-sync">
+<h2>Database.sync()</h2>
+<blockquote>
+Initializes a <a class="reference internal" href="#pull">pull</a> followed by a <a class="reference internal" href="#push">push</a>.</blockquote>
+</div>
+<div class="section" id="database-pull">
+<span id="pull"></span><h2>Database.pull()</h2>
+<blockquote>
+<p><em>Important</em> details on conflict resolution are described here. Read carefully.</p>
+<p>If a remote API and database name are configured, fetch all new updates from the Sync
+server and apply them locally.</p>
+<p>In the event of a conflict between an unsynced local change and a remote change being
+pulled, the <cite>&quot;conflict&quot;</cite> event will be triggered on the store containing the object.</p>
+<p>The conflict event is given a <cite>put()</cite> callback, <cite>key</cite>, <cite>local value</cite>, and
+<cite>remote value</cite>, in that order. The conflict handler is responsible for saving any altered
+values or new keys as a result of the conflict, exclusively through the <cite>put()</cite> callback
+it receives.</p>
+<p>If the handler saves any objects, these objects will be the sole results of the conflict
+and may not even include the original objects or keys at all. For example, two objects
+conflicting could result in a new merged object. If this is the case, you should <a class="reference internal" href="#push">push</a>
+to share the results with the sync server.</p>
+<p>If the handler does <em>not</em> save any objects, the default behavior is used and only the
+remote version is kept.</p>
+</blockquote>
+</div>
+<div class="section" id="database-push">
+<span id="push"></span><h2>Database.push()</h2>
+<blockquote>
+If a remote APi and database name are configured, send all unsubmitted changes to the
+Sync server. The remote server will reject the changes if a <a class="reference internal" href="#pull">pull</a> is required first,
+triggering an error.</blockquote>
+</div>
+<div class="section" id="database-drop">
+<h2>Database.drop()</h2>
+<blockquote>
+<p><em>Important</em> this is not reversable! This removes all local data!</p>
+<p>Removes the local database entirely.</p>
+</blockquote>
+</div>
+<div class="section" id="database-reset">
+<h2>Database.reset()</h2>
+<blockquote>
+<p><em>Important</em> this is not reversable! This removes all local data!</p>
+<p>Removes the local database entirely, then recreates it with the current schema and no
+data.</p>
+</blockquote>
+</div>
+</div>
+<div class="section" id="id1">
+<h1>Transaction</h1>
+<blockquote>
+<p>The transaction is created by the <a class="reference internal" href="#transaction">transaction</a> method on the <a class="reference internal" href="#database">Database</a>.</p>
+<p>Transaction inherits from its own <a class="reference internal" href="#database">Database</a> and inherits all of its methods.</p>
+<p>The transaction will commit when it is garbage collected, if it was not aborted.</p>
+</blockquote>
+<div class="section" id="transaction-abort">
+<h2>Transaction.abort()</h2>
+<blockquote>
+Rejects all changes made in this transaction.</blockquote>
+</div>
+<div class="section" id="transaction-commit">
+<h2>Transaction.commit()</h2>
+<blockquote>
+Removes local references to the internal transaction object, which allows the
+automatic commit behavior to trigger.</blockquote>
+</div>
+</div>
+<div class="section" id="localstore">
+<h1>LocalStore</h1>
+<blockquote>
+The <a class="reference internal" href="#database">Database</a> contains one or more stores, where you place your data. The
+<a class="reference internal" href="#localstore">LocalStore</a> makes working with these IndexedDB constructs easier, and they are the
+primary interface you'll use.</blockquote>
+<div class="section" id="localstore-count">
+<h2>LocalStore.count()</h2>
+<blockquote>
+Request the total number of objects currently saved in the store.</blockquote>
+</div>
+<div class="section" id="localstore-by-indexname">
+<h2>LocalStore.by(<cite>indexname</cite>)</h2>
+<blockquote>
+<p>Access a named index, where query operations can be done against the indexed property.</p>
+<p>The index is a version of the key using the indexed property as te key to identify stored
+objects by.</p>
+<p>The indexed are defined as part of the schema during <a class="reference internal" href="#database">Database</a> creation,
+can only be created or changed in schema upgrades, and they are only way to
+filter store contents by anything other than the <cite>key</cite>.</p>
+</blockquote>
+</div>
+<div class="section" id="localstore-walk-filter">
+<h2>LocalStore.walk(<cite>filter</cite>)</h2>
+<blockquote>
+<p>Request objects from the store, triggering an 'each' event on the promise for every
+object found. Does not collect the objects into any array. This method is memory efficient.</p>
+<p>The <cite>filter</cite> parameter controls which objects are returned. The follow keys are allowed,
+including combinations.</p>
+<dl class="docutils">
+<dt>gt</dt>
+<dd>Only find keys greater than a given value</dd>
+<dt>gte</dt>
+<dd>Only find keys greater or equal to a given value</dd>
+<dt>lt</dt>
+<dd>Only find keys less than a given value</dd>
+<dt>lte</dt>
+<dd>Only find keys less than or equal to a given value</dd>
+<dt>start</dt>
+<dd>An index into the results to begin</dd>
+<dt>stop</dt>
+<dd>An index into the results to stop. The given index will not be included.</dd>
+<dt>reverse</dt>
+<dd>If true, the results will be given in reverse order</dd>
+</dl>
+<p>A non-object value for <cite>filter</cite> will find all objects with a key exactly equal to it.</p>
+</blockquote>
+</div>
+<div class="section" id="localstore-fetch-filter">
+<h2>LocalStore.fetch(<cite>filter</cite>)</h2>
+<blockquote>
+<p>Request an array of all objects in the store, accepting the same <cite>filter</cite> parameter
+as the <cite>walk()</cite> method above.</p>
+<p>The result is an array of objects with <cite>key</cite> and <cite>value</cite> properties, with a single method
+<cite>next()</cite> which, if fetch() had been called with <cite>start</cite> and <cite>stop</cite> parameters, will fetch
+the next page of results.</p>
+</blockquote>
+</div>
+<div class="section" id="localstore-add-key-value">
+<h2>LocalStore.add(<cite>key</cite>, <cite>value</cite>)</h2>
+<blockquote>
+<p>Saves a value in the store, and fails if a value with the same key exists.</p>
+<p>The new value is queued for the next <a class="reference internal" href="#push">push</a>.</p>
+</blockquote>
+</div>
+<div class="section" id="localstore-put-key-value">
+<h2>LocalStore.put(<cite>key</cite>, <cite>value</cite>)</h2>
+<blockquote>
+<p>Saves a value in the store, and replaces any value currently stored at the
+same key.</p>
+<p>The new value is queued for the next <a class="reference internal" href="#push">push</a>.</p>
+</blockquote>
+</div>
+<div class="section" id="localstore-putmany-many">
+<h2>LocalStore.putmany(<cite>many</cite>)</h2>
+<blockquote>
+<p>If you need to update many objects together, this method is helpful. It
+takes an array of objects with <cite>key</cite> and <cite>value</cite> properties, and puts all of
+them into the store in a single transaction.</p>
+<p>There is no varient to &quot;add many&quot;, however.</p>
+</blockquote>
+</div>
+<div class="section" id="localstore-meta-key-metaname-metavalue">
+<h2>LocalStore.meta(<cite>key</cite>, <cite>metaname</cite>, <cite>(metavalue)</cite>)</h2>
+<blockquote>
+<p>If <cite>metavalue</cite> is missing, retreive the meta data associated with <cite>key</cite> named
+<cite>metaname</cite>. However, if <cite>metavalue</cite> is present, change the value for this
+meta data.</p>
+<p>Any number of arbitrary meta fields may be associated with an object.</p>
+</blockquote>
+</div>
+</div>
+<div class="section" id="results">
+<h1>Results</h1>
+<blockquote>
+Stores results from a fetch() call, and allows a number of useful operations on them.</blockquote>
+<div class="section" id="results-watch-immediately">
+<h2>Results.watch(immediately)</h2>
+<blockquote>
+<p>When the source store is updated, update the resutl set with new data.</p>
+<p>The <cite>immediately</cite> parameter specifies if the results should be immediately refreshed
+to catch any changes made before it started watching, or should only update on the next
+update event. <cite>immediately</cite> defaults to <cite>true</cite>.</p>
+</blockquote>
+</div>
+<div class="section" id="results-refresh">
+<h2>Results.refresh()</h2>
+<blockquote>
+<p>Repeat the query and update the results with current data.</p>
+<p>The result set is only updated if the query succeeds.</p>
+</blockquote>
+</div>
+<div class="section" id="results-addlimit-n">
+<h2>Results.addLimit(n)</h2>
+<blockquote>
+<p>Increase the limit on the number of results to object, and load the new items.</p>
+<p>NOTE: Because this refreshes the query, even existing results from the original limit
+could change.</p>
+</blockquote>
+</div>
+<div class="section" id="results-next">
+<h2>Results.next()</h2>
+<blockquote>
+<p>Shift to the next page of results, of the same length as the current.</p>
+<p>Causes a NoSuchPage error, if this results in no data.</p>
+</blockquote>
+</div>
+<div class="section" id="results-previous">
+<h2>Results.previous()</h2>
+<blockquote>
+<p>Shift to the previous page of results, of the same length as the current.</p>
+<p>Causes a NoSuchPage error, if this results in no data.</p>
+</blockquote>
+</div>
+</div>
+<div class="section" id="syncstore">
+<h1>SyncStore</h1>
+<blockquote>
+The SyncStore offers no special API for public use, but implements some internal
+pieces to coordinate <a class="reference internal" href="#push">push</a> and <a class="reference internal" href="#pull">pull</a> requests with the <a class="reference internal" href="#database">Database</a>.</blockquote>
+</div>
+<div class="section" id="credentials">
+<h1>Credentials</h1>
+<blockquote>
+Access and secret token pairs are housed in a <a class="reference internal" href="#credentials">Credentials</a> object.</blockquote>
+<div class="section" id="credentials-self-cred">
+<h2>Credentials.self_cred()</h2>
+<blockquote>
+<p>The credentials will from this point forward authenticate API requests with themselves.</p>
+<p>Credentials are used for all interactions with the Plasmid Sync service, including
+API calls to inspect the permissions a particular set of credentials has. For this
+reason, it may be common to make credential requests authenticated with another pair.</p>
+<p>For example, an initial account is created for a user by creating their new Device
+Credentials with a pair of Bootstrap Credentials.</p>
+<p>Self Credentials are both the actor and target of their own API calls.</p>
+</blockquote>
+</div>
+<div class="section" id="credentials-complete">
+<h2>Credentials.complete()</h2>
+<blockquote>
+<p>Identifies the credentials as including a secret token, or only an access token.</p>
+<p>Returns <cite>true</cite> or <cite>false</cite>.</p>
+</blockquote>
+</div>
+<div class="section" id="credentials-list">
+<h2>Credentials.list()</h2>
+<blockquote>
+Fetches a list of permissions granted to these credentials.</blockquote>
+</div>
+<div class="section" id="credentials-grant-resource-permission-value">
+<h2>Credentials.grant(<cite>resource</cite>, <cite>permission</cite>, <cite>value</cite>)</h2>
+<blockquote>
+<p>Grant new permissions to these credentials.</p>
+<p>This method is obviously useless for Self-authenticating Credentials, as they can only
+grant permissions they already have.</p>
+<p>Any credentials may be grant any of their own permissions to another credentials pair.</p>
+<p>Full explaination of permissions will be added in a separate document.</p>
+</blockquote>
+</div>
+<div class="section" id="credentials-create-type">
+<h2>Credentials.create(<cite>type</cite>)</h2>
+<blockquote>
+<p>Creates a new set of credentials, and populates this object with the new access and secret.</p>
+<p>For example, this would create a new Device Credential Pair, authenticated with Bootstrap
+Credentials capable only of creating new accounts.</p>
+<div class="highlight"><pre><span class="nx">bootstrap_credentials</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">plasmid</span><span class="p">.</span><span class="nx">Credentials</span><span class="p">({</span>
+    <span class="nx">access</span><span class="o">:</span> <span class="s2">&quot;guest-creator&quot;</span><span class="p">,</span>
+    <span class="nx">secret</span><span class="o">:</span> <span class="s2">&quot;knock-knock&quot;</span>
+<span class="p">});</span>
+<span class="nx">my_credentials</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Credentials</span><span class="p">({</span>
+    <span class="nx">credentials</span><span class="o">:</span> <span class="nx">bootstrap_credentials</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="nx">my_credentials</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s1">&#39;guest&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;I have a new access token: &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">access</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;And a new remote database to sync with: &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">dbname</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;But, I&#39;m not telling you the value of data.secret&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Remember the credentials to re-use later, and set the new remote name</span>
+
+    <span class="nx">self</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;credentials&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">access</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">access</span><span class="p">,</span>
+        <span class="nx">secret</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">secret</span><span class="p">,</span>
+        <span class="nx">dbname</span><span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">dbname</span><span class="p">,</span>
+    <span class="p">});</span>
+    <span class="nx">database</span><span class="p">.</span><span class="nx">setRemote</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">dbname</span><span class="p">);</span>
+<span class="p">})</span>
+</pre></div>
+</blockquote>
+</div>
+</div>
+</div>
+
+    </article>
+
+    
+
+    </div>
+
+
+	</div>
+	<footer>
+        
+    copyright 2013 Calvin Spealman
+
+	</footer>
+</div> <!--! end of #container -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+
+<!-- scripts concatenated and minified via ant build script-->
+<script src="js/plugins.js"></script>
+<script src="js/script.js"></script>
+<!-- end scripts-->
+
+<script>
+	var _gaq=[['_setAccount','UA-953592-23'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
+	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+<!--[if lt IE 7 ]>
+	<script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
+<![endif]-->
+
+    
+</body>
+</html>

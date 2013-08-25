@@ -49,6 +49,16 @@ body {
     h1,h2,h3,h4,h5,h6 { a { color: @color; } }
     h1,h2,h3,h4,h5,h6 { a:visited { color: @color; } }
     h1,h2,h3,h4,h5,h6 { a:hover { color: lighten(@link, 20%); } }
+
+    h1 {
+        font-size: 24pt;
+    }
+    h2 {
+        font-size: 16pt;
+    }
+    h3 {
+        font-size: 14pt;
+    }
 }
 
 header {
@@ -107,21 +117,34 @@ footer {
     .pagePadding;
 }
 
-.col-25 {
-    width: 23%;
-    margin-right: 2%;
+.clearboth {
+    clear: both;
+}
+
+.col {
     float: left;
+}
+
+.col-25 {
+    .col;
+    width: 25%;
     position: relative;
 }
 
 .col-50 {
+    .col;
     width: 50%;
-    float: left;
+    display: inline-block;
+
+    p {
+        padding-right: 1em;
+    }
 }
 
 .col-75 {
+    .col;
     width: 75%;
-    float: left;
+    display: inline-block;
 }
 
 ul.list {
